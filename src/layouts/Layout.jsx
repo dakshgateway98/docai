@@ -10,9 +10,9 @@ const Layout = ({ pageTitle, ...props }) => {
   return (
     <div className="font-roboto font-thin">
       <Navbar />
-      <div className="px-5 py-4">
-        <h1>{pageTitle}</h1>
-        <hr className="my-5" />
+      <div>
+        {/* <h1>{pageTitle}</h1> */}
+        {/* <hr className="my-5" /> */}
         {loading ? <div className="text-center">... loading ...</div> : props.children}
       </div>
     </div>
