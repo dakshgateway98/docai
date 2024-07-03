@@ -1,8 +1,9 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { Navbar } from '../components';
 import { loadingSelector } from './../containers/App/selectors';
+
+import Navbar from '../components/Navbar';
 
 const Layout = ({ pageTitle, ...props }) => {
   const loading = useSelector(loadingSelector());
@@ -10,11 +11,7 @@ const Layout = ({ pageTitle, ...props }) => {
   return (
     <div className="font-roboto font-thin">
       <Navbar />
-      <div>
-        {/* <h1>{pageTitle}</h1> */}
-        {/* <hr className="my-5" /> */}
-        {loading ? <div className="text-center">... loading ...</div> : props.children}
-      </div>
+      <div>{loading ? <div className="text-center">... loading ...</div> : props.children}</div>
     </div>
   );
 };

@@ -22,6 +22,7 @@ const App = () => {
       <HistoryRouter history={history}>
         <Routes>
           <Route path={routes.login} exact element={<LoginPage />} />
+          <Route path={routes.home} exact element={<HomePage />} /> 
           {/* <Route path={routes.users} exact element={<UsersPage />} />
         <Route path={routes.user()} exact element={<UserPage />} />
         <Route path={routes.home} exact element={<HomePage />} /> */}

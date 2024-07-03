@@ -31,11 +31,11 @@ const Login = () => {
       e.preventDefault();
     if (isLogin) {
       setIsSigningIn(true);
-      await doSignInWithEmailAndPassword(email, password);
+      // await doSignInWithEmailAndPassword(email, password);
     }else{
       setIsRegistering(true);
-      const response = await doCreateUserWithEmailAndPassword(email, password);
-      console.log({response})
+      // const response = await doCreateUserWithEmailAndPassword(email, password);
+      // console.log({response})
     }
     } catch (error) {
       console.log({error})
@@ -57,9 +57,9 @@ const Login = () => {
     e.preventDefault();
     if (!isSigningIn) {
       setIsSigningIn(true);
-      doSignInWithGoogle().catch(err => {
-        setIsSigningIn(false);
-      });
+      // doSignInWithGoogle().catch(err => {
+      //   setIsSigningIn(false);
+      // });
     }
   };
 
