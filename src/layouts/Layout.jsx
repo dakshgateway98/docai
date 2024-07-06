@@ -1,17 +1,13 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import NavBar from '../components/Navbar';
 
-import { loadingSelector } from './../containers/App/selectors';
 
-import Navbar from '../components/Navbar';
-
-const Layout = ({ pageTitle, ...props }) => {
-  const loading = useSelector(loadingSelector());
+const Layout = ({ ...props }) => {
 
   return (
     <div className="font-roboto font-thin">
-      <Navbar />
-      <div>{loading ? <div className="text-center">... loading ...</div> : props.children}</div>
+      <NavBar />
+      <div>{props.children}</div>
     </div>
   );
 };

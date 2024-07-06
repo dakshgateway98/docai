@@ -4,79 +4,81 @@ import { useNavigate } from 'react-router-dom';
 
 import { Layout } from '../../layouts';
 
-import { useAuth } from '../../contexts/authContext';
-
-import { doCreateUserWithEmailAndPassword, doSignInWithEmailAndPassword, doSignInWithGoogle } from '../../firebase/auth';
-import { auth } from '../../firebase/firebase';
-
 const Login = () => {
-  const [isSigningIn, setIsSigningIn] = useState(false);
-
   const navigate = useNavigate();
 
+  const [isSigningIn, setIsSigningIn] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setconfirmPassword] = useState('');
   const [isRegistering, setIsRegistering] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [userName, setUserName] = useState('');
+  const [isLogin, setIsLogin] = useState(true);
+  const [isForgotpass, setIsForgotpass] = useState(false);
 
-  const [isLogin, setIsLogin] = useState(true)
-
-  const { userLoggedIn , currentUser } = useAuth();
-
-  console.log({currentUser})
+  // const { userLoggedIn , currentUser } = useAuth();
 
   const onSubmit = async e => {
     try {
       e.preventDefault();
-    if (isLogin) {
-      setIsSigningIn(true);
-      // await doSignInWithEmailAndPassword(email, password);
-    }else{
-      setIsRegistering(true);
-      // const response = await doCreateUserWithEmailAndPassword(email, password);
-      // console.log({response})
-    }
+      if (isLogin) {
+        setIsSigningIn(true);
+      } else {
+        setIsRegistering(true);
+      }
     } catch (error) {
-      console.log({error})
+      console.log({ error });
     }
-    
   };
-
-  // useEffect(() => {
-  //  let unsubscribe = auth.onAuthStateChanged(user => {
-  //     if (user) {
-  //       console.log(user)
-  //     }
-  //   })
-  //   return unsubscribe;
-  // }, [])
-  
 
   const onGoogleSignIn = e => {
     e.preventDefault();
     if (!isSigningIn) {
       setIsSigningIn(true);
-      // doSignInWithGoogle().catch(err => {
-      //   setIsSigningIn(false);
-      // });
     }
   };
 
   return (
     <Layout>
-      <section class="bg-gray-50 dark:bg-gray-900 h-100">
-        <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-          <div class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-            <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
-              <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                {isLogin ? 'Sign in to your account' : 'Create an account'}
+      <section className="bg-gray-50 dark:bg-gray-900 h-100">
+        <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+          <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+            <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+              <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+                {isLogin
+                  ? 'Sign in to your account'
+                  : isForgotpass
+                  ? 'Send an Email'
+                  : 'Create an account'}
               </h1>
-              <form onSubmit={onSubmit} class="space-y-4 md:space-y-6" action="#">
+              <form onSubmit={onSubmit} className="space-y-4 md:space-y-6" action="#">
+                {!isForgotpass && !isLogin && (
+                  <div>
+                    <label
+                      htmlFor="name"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Name
+                    </label>
+                    <input
+                      type="name"
+                      name="name"
+                      id="name"
+                      value={userName}
+                      onChange={e => {
+                        setUserName(e.target.value);
+                      }}
+                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="John Doe"
+                      required={true}
+                    />
+                  </div>
+                )}
                 <div>
                   <label
-                    for="email"
-                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    htmlFor="email"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Your email
                   </label>
@@ -88,90 +90,94 @@ const Login = () => {
                     onChange={e => {
                       setEmail(e.target.value);
                     }}
-                    class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="name@company.com"
-                    required=""
+                    required={true}
                   />
                 </div>
-                {isLogin ? (
-                  <>
-                    {' '}
-                    <div>
-                      <label
-                        for="password"
-                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                      >
-                        Password
-                      </label>
-                      <input
-                        type="password"
-                        name="password"
-                        id="password"
-                        value={password}
-                        onChange={e => {
-                          setPassword(e.target.value);
-                        }}
-                        placeholder="••••••••"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        required=""
-                      />
-                    </div>
-                    {errorMessage && (
-                            <span className='text-red-600 font-bold'>{errorMessage}</span>
-                        )}
-                    <div class="flex items-center justify-between">
-                      {/* <div class="flex items-start">
-                        <div class="flex items-center h-5">
+                {!isForgotpass && isLogin && (
+                  <div>
+                    <label
+                      htmlFor="password"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Password
+                    </label>
+                    <input
+                      type="password"
+                      name="password"
+                      id="password"
+                      value={password}
+                      onChange={e => {
+                        setPassword(e.target.value);
+                      }}
+                      placeholder="••••••••"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      required={true}
+                    />
+                  </div>
+                )}
+                {errorMessage && <span className="text-red-600 font-bold">{errorMessage}</span>}
+                <div className="flex items-center justify-between">
+                  {/* <div className="flex items-start">
+                        <div className="flex items-center h-5">
                           <input
                             id="remember"
                             aria-describedby="remember"
                             type="checkbox"
-                            class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
+                            className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
                             required=""
                           />
                         </div>
-                        <div class="ml-3 text-sm">
-                          <label for="remember" class="text-gray-500 dark:text-gray-300">
+                        <div className="ml-3 text-sm">
+                          <label for="remember" className="text-gray-500 dark:text-gray-300">
                             Remember me
                           </label>
                         </div>
                       </div> */}
-                      <a
-                        href="#"
-                        class="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500"
-                      >
-                        Forgot password?
-                      </a>
+                  {!isForgotpass && (
+                    <div
+                      className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500"
+                      onClick={() => {
+                        setIsForgotpass(true);
+                        setIsLogin(false);
+                      }}
+                    >
+                      Forgot password?
                     </div>
-                  </>
-                ) : (
-                  <></>
-                )}
+                  )}
+                </div>
                 <button
                   type="submit"
-                  class="flex w-full justify-center rounded-md bg-sky-400 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  className="flex w-full justify-center rounded-md bg-sky-400 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
-                  {isLogin ? 'Sign in' : 'Send Email Verification'}
+                  {!isForgotpass && isLogin ? 'Sign in' : 'Send Email Verification'}
                 </button>
 
                 {isLogin ? (
-                  <p class="text-sm font-light text-gray-500 dark:text-gray-400">
+                  <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                     Don’t have an account yet?{' '}
                     <a
                       href="#"
-                      onClick={() => setIsLogin(false)}
-                      class="font-medium text-primary-600 hover:underline dark:text-primary-500"
+                      onClick={() => {
+                        setIsLogin(false);
+                        setIsForgotpass(false);
+                      }}
+                      className="font-medium text-primary-600 hover:underline dark:text-primary-500"
                     >
                       Sign up
                     </a>
                   </p>
                 ) : (
-                  <p class="text-sm font-light text-gray-500 dark:text-gray-400">
+                  <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                     Already have an account{' '}
                     <a
                       href="#"
-                      onClick={() => setIsLogin(true)}
-                      class="font-medium text-primary-600 hover:underline dark:text-primary-500"
+                      onClick={() => {
+                        setIsLogin(true);
+                        setIsForgotpass(false);
+                      }}
+                      className="font-medium text-primary-600 hover:underline dark:text-primary-500"
                     >
                       Sign In
                     </a>{' '}
