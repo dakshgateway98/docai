@@ -24,9 +24,9 @@
     "url": ""
   },
   "scripts": {
-    "start": "vite",
+    "start": "vite --host",
     "build": "vite build",
-    "serve": "vite preview"
+    "serve": "vite preview --host"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.5",
