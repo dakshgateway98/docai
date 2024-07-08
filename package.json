@@ -25,7 +25,8 @@
   },
   "scripts": {
     "start": "vite",
-    "build": "vite build"
+    "build": "vite build",
+    "serve": "vite preview"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.5",
