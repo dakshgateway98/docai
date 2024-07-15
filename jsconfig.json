@@ -1,11 +1,17 @@
 {
-    "compilerOptions": {
-      "jsx":"react",
-      "strict": true,
-      "paths": {
-      "react": [ "./node_modules/@types/react" ]
-      }
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "strict": false,
+    "paths": {
+      "react": ["./node_modules/@types/react"]
     },
-    
-    "exclude": ["node_modules", "**/node_modules/*"]
-  }
+    "target": "ES6", // Specify ECMAScript target version
+    "module": "commonjs", // Specify module code generation
+    "checkJs": true, // Enable type checking in .js files
+    "moduleResolution": "node", // Use Node.js module resolution strategy
+    "skipLibCheck": false,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "**/node_modules/*"]
+}

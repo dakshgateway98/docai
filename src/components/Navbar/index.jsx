@@ -1,6 +1,5 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { IoHomeOutline, IoHomeSharp, IoLogInSharp, IoPersonSharp } from 'react-icons/io5';
+import { IoHomeOutline } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
 
 import { routes } from '../../utils';
@@ -8,43 +7,19 @@ import { routes } from '../../utils';
 const NavBar = () => {
   const { t, i18n } = useTranslation();
 
-  return (
-    <div className="bg-sky-400 px-5 py-5 text-white flex justify-between items-center">
-      <Link to={routes.home} className="flex items-center space-x-1">
-        <IoHomeOutline size={24} title={t('components.navbar.home')} />
-      </Link>
+  const handleLogout = () => {
+    localStorage.removeItem('jwt');
+    localStorage.removeItem('userDetails');
+  }
 
-      <ul className="flex space-x-5 justify-end">
-        {/* <li>
-          <Link
-            to={routes.users}
-            className="flex items-center space-x-1"
-            title={t('components.navbar.users')}
-          >
-            <IoPersonSharp />
-            <span>{t('components.navbar.users')}</span>
-          </Link>
-        </li> */}
-        {/* <li>
-          <Link to={routes.login} className="flex items-center space-x-1">
-            <IoLogInSharp />
-            <span>{t('components.navbar.login')}</span>
-          </Link>
-        </li> */}
-        {/* <li>
-          <select
-            defaultValue={i18n.language}
-            onChange={e => i18n.changeLanguage(e.target.value)}
-            className="bg-transparent outline-none uppercase"
-          >
-            {Object.keys(i18n.options.resources).map(lng => (
-              <option key={lng} value={lng}>
-                {lng}
-              </option>
-            ))}
-          </select>
-        </li> */}
-      </ul>
+  return (
+    <div className="bg-blue-500 px-6 py-4 text-white flex justify-between items-center w-full">
+      <Link to="/" className="flex items-center space-x-2">
+        <IoHomeOutline size={24} title="Home" />
+      </Link>
+      <Link onClick={handleLogout} to="/login" className="flex items-center space-x-2">
+        <span>Logout</span>
+      </Link>
     </div>
   );
 };

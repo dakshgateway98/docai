@@ -1,9 +1,10 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import { unstable_HistoryRouter as HistoryRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { HomePage, LoginPage } from '../';
-// import { AuthProvider } from '../../contexts/authContext';
 import { en, it } from '../../locales';
 import { history, routes } from '../../utils';
 import VerifyPage from '../VerifyPage';
@@ -21,10 +22,11 @@ const App = () => {
   return (
     // <AuthProvider>
       <HistoryRouter history={history}>
+        <ToastContainer />
         <Routes>
-          <Route path={routes.login} exact element={<LoginPage />} />
-          <Route path={routes.verify} exact element={<VerifyPage />} />
-          <Route path={routes.home} exact element={<HomePage />} /> 
+          <Route path={routes.login} element={<LoginPage />} />
+          <Route path={routes.verify} element={<VerifyPage />} />
+          <Route path={routes.home} element={<HomePage />} />
           <Route path="*" element={<Navigate replace to={routes.login} />} />
         </Routes>
       </HistoryRouter>

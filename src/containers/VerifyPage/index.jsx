@@ -1,20 +1,28 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { resetPasswordUserAPI } from '../../api/auth';
 import { routes } from '../../utils';
-import { useNavigate } from 'react-router-dom';
-import { t } from 'i18next';
 
 const VerifyPage = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
   const handleResetPassword = async () => {
     if (password !== confirmPassword) {
       setErrorMessage('Passwords do not match');
       return;
     }
     try {
+      const dataObj = {
+        newPassword:password,
+        token:searchParams.get('token')
+      }
+      const res = await resetPasswordUserAPI(dataObj);
+      console.log(res);
       //   await Auth.forgotPasswordSubmit(username, code, password);
       navigate(routes.login);
     } catch (error) {
@@ -73,7 +81,7 @@ const VerifyPage = () => {
 
               <button
                 onClick={handleResetPassword}
-                type="submit"
+                type="button"
                 className="flex w-full justify-center rounded-md bg-sky-400 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 {'Reset Password'}
