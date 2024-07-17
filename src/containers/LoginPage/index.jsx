@@ -8,7 +8,8 @@ import { apiEndPoint } from '../../api/apiEndPoint';
 import { forgotPasswordUserAPI, registerUserAPI, signInUserAPI } from '../../api/auth';
 import Loader from '../../common/Loader';
 import { displayInfoToast } from '../../helpers/displayToast';
-import { addUser } from '../../redux/userAuthSlice';
+import { addUser, updateIsLogged } from '../../redux/userAuthSlice';
+import { routes } from '../../utils';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -49,7 +50,8 @@ const Login = () => {
             token: res.data || '',
           };
           dispatch(addUser(userDeatils));
-          navigate('/home');
+          dispatch(updateIsLogged(true));
+          navigate(routes.home);
         }
       } else {
         const dataObj = {

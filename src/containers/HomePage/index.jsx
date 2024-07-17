@@ -6,41 +6,44 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
 import { Layout } from '../../layouts';
-
 import { setToken } from '../../api';
 import { uploadXrayAPI } from '../../api/genai';
 import ChatGPTOutput from '../../common/ChatGPTOutput';
 import { displayErrorToast } from '../../helpers/displayToast';
 import useCookie from '../../hooks/useCookie';
+import ImageModal from './../../common/ImageModal'; 
 
 const Home = () => {
   const { t } = useTranslation();
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedFiles, setSelectedFiles] = useState([]);
   const [report, setReport] = useState('');
   const [clinicNote, setClinicNote] = useState('');
-  const userDetails = useSelector(state => _.get(state, 'userAuth.userDetails', null));
+  const userData = useSelector(state => _.get(state, "user.userData", null));
   const [isLoading, setIsLoading] = useState(false);
   const [value] = useCookie('jwt', null);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [modalImage, setModalImage] = useState(null);
 
   const handleFileChange = event => {
-    const file = event.target.files[0];
-    if (file && file.type.startsWith('image/')) {
-      setSelectedFile(file);
+    const files = Array.from(event.target.files);
+    const validFiles = files.filter(file => file.type.startsWith('image/'));
+    if (validFiles.length) {
+      setSelectedFiles(validFiles);
       setReport('');
     } else {
-      alert('Please select a valid image file.');
+      alert('Please select valid image files.');
       event.target.value = null;
     }
   };
 
   const handleUpload = async () => {
-    if (selectedFile && clinicNote) {
+    if (selectedFiles.length && clinicNote) {
       const formData = new FormData();
-      formData.append('images', selectedFile);
+      selectedFiles.forEach(file => formData.append('images', file));
       formData.append('prompt', clinicNote);
       setIsLoading(true);
       try {
-        const token = userDetails?.token || '';
+        const token = userData?.token || "";
         token && setToken(token);
         const response = await uploadXrayAPI(formData);
         setReport(response.data);
@@ -50,7 +53,7 @@ const Home = () => {
         setIsLoading(false);
       }
     } else {
-      displayErrorToast('Please select a file and provide clinic notes.');
+      displayErrorToast('Please select files and provide clinic notes.');
     }
   };
 
@@ -58,15 +61,26 @@ const Home = () => {
     navigator.clipboard.writeText(report);
   };
 
+  const openModal = (image) => {
+    setModalImage(image);
+    setModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+    setModalImage(null);
+  };
+
   return (
     <Layout>
       <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
         <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl">
-          <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">Upload X-ray Image</h1>
+          <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">Upload X-ray Images</h1>
           <div className="flex flex-col md:flex-row items-center justify-around mb-6">
             <div className="flex flex-col w-full md:w-1/2 mb-4 md:mb-0 md:mr-4">
               <input
                 type="file"
+                multiple
                 onChange={handleFileChange}
                 className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
               />
@@ -80,17 +94,23 @@ const Home = () => {
                 onClick={handleUpload}
                 className="mt-4 w-full bg-blue-600 text-white px-4 py-2 rounded-md font-semibold hover:bg-blue-700 transition duration-200"
               >
-                Generate Report
+                {isLoading ? 'Uploading...' : 'Generate Report'}
               </button>
             </div>
-            {selectedFile && (
+            {selectedFiles.length > 0 && (
               <div className="flex flex-col w-full md:w-1/2 items-center">
                 <h2 className="text-lg font-semibold text-gray-700 mb-2">Preview:</h2>
-                <img
-                  src={URL.createObjectURL(selectedFile)}
-                  alt="X-ray preview"
-                  className="rounded-md shadow-md h-32 w-32 object-cover mb-4"
-                />
+                <div className="grid grid-cols-2 gap-4">
+                  {selectedFiles.map((file, index) => (
+                    <img
+                      key={index}
+                      src={URL.createObjectURL(file)}
+                      alt="X-ray preview"
+                      className="rounded-md shadow-md h-32 w-32 object-cover mb-4 cursor-pointer"
+                      onClick={() => openModal(URL.createObjectURL(file))}
+                    />
+                  ))}
+                </div>
               </div>
             )}
           </div>
@@ -112,6 +132,11 @@ const Home = () => {
           )}
         </div>
       </div>
+      <ImageModal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        imageSrc={modalImage}
+      />
     </Layout>
   );
 };
