@@ -1,13 +1,14 @@
 import { useTranslation } from 'react-i18next';
 import { IoHomeOutline } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
+import { logout } from '../../helpers/logout';
 
 
 const NavBar = () => {
   const { t, i18n } = useTranslation();
 
   const handleLogout = () => {
-    localStorage.removeItem('persist:docai');
+    logout();
   }
 
   return (

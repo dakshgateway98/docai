@@ -71,6 +71,13 @@ const Login = () => {
   const onGoogleSignIn = async e => {
     e.preventDefault();
     if (!isSigningIn) {
+      const userDeatils = {
+        email,
+        isLoginByEmail: false,
+        isLoginByGoogle: true,
+      };
+      dispatch(addUser(userDeatils));
+      dispatch(updateIsLogged(true));
       window.location.href = `${process.env.REACT_APP_API_URL}${apiEndPoint.GOOGLE_LOGIN}`;
       setIsSigningIn(true);
     }

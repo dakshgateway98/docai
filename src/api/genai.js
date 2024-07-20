@@ -16,3 +16,11 @@ export const uploadXrayAPI = async postData => {
 };
 
 
+export const getReportOptionsAPI = async () => {
+  try {
+    const res = await client.get(apiEndPoint.REPORT_OPTIONS);
+    return res.data;
+  } catch (error) {
+    return handleError(error);
+  }
+};

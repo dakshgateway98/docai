@@ -6,4 +6,6 @@ export const apiEndPoint = {
   GOOGLE_LOGIN: '/auth/google-login',
   GOOGLE_CALLBACK: '/google/callback',
   GEN_AI_X_RAY_UPLOAD: '/pub/generate-text',
+  REPORT_OPTIONS: '/pub/report-options',
+  GET_USER_DETAILS: '/profile',
 };

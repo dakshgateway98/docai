@@ -1,28 +1,38 @@
 import { faCopy } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import _ from 'lodash';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 import { Layout } from '../../layouts';
+
 import { setToken } from '../../api';
-import { uploadXrayAPI } from '../../api/genai';
+import { apiEndPoint } from '../../api/apiEndPoint';
+import { getReportOptionsAPI, uploadXrayAPI } from '../../api/genai';
+import { getUserDetailsAPI } from '../../api/user';
 import ChatGPTOutput from '../../common/ChatGPTOutput';
 import { displayErrorToast } from '../../helpers/displayToast';
+import { logout } from '../../helpers/logout';
 import useCookie from '../../hooks/useCookie';
-import ImageModal from './../../common/ImageModal'; 
+import { addUser, updateIsLogged } from '../../redux/userAuthSlice';
+import ImageModal from './../../common/ImageModal';
 
 const Home = () => {
   const { t } = useTranslation();
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [report, setReport] = useState('');
   const [clinicNote, setClinicNote] = useState('');
-  const userData = useSelector(state => _.get(state, "user.userData", null));
+  const userData = useSelector(state => _.get(state, 'user.userData', null));
   const [isLoading, setIsLoading] = useState(false);
-  const [value] = useCookie('jwt', null);
+  const [googleLoginToken] = useCookie('jwt', null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalImage, setModalImage] = useState(null);
+  const [reportType, setReportType] = useState('');
+  const [allReportType, setAllReportType] = useState([]);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleFileChange = event => {
     const files = Array.from(event.target.files);
@@ -36,15 +46,19 @@ const Home = () => {
     }
   };
 
+  const handleRemoveImage = index => {
+    const updatedFiles = selectedFiles.filter((_, i) => i !== index);
+    setSelectedFiles(updatedFiles);
+  };
+
   const handleUpload = async () => {
     if (selectedFiles.length && clinicNote) {
       const formData = new FormData();
       selectedFiles.forEach(file => formData.append('images', file));
       formData.append('prompt', clinicNote);
+      formData.append('type', reportType);
       setIsLoading(true);
       try {
-        const token = userData?.token || "";
-        token && setToken(token);
         const response = await uploadXrayAPI(formData);
         setReport(response.data);
       } catch (error) {
@@ -53,7 +67,7 @@ const Home = () => {
         setIsLoading(false);
       }
     } else {
-      displayErrorToast('Please select files and provide clinic notes.');
+      displayErrorToast('Please select files and provide clinic note.');
     }
   };
 
@@ -61,7 +75,7 @@ const Home = () => {
     navigator.clipboard.writeText(report);
   };
 
-  const openModal = (image) => {
+  const openModal = image => {
     setModalImage(image);
     setModalIsOpen(true);
   };
@@ -71,19 +85,78 @@ const Home = () => {
     setModalImage(null);
   };
 
+  const getUserUserData = async () => {
+    const tokenToUse = userData?.isLoginByGoogle ? googleLoginToken : userData?.token;
+    setToken(tokenToUse);
+    try {
+      const response = await getUserDetailsAPI();
+      if (response.success) {
+        const userDeatils = {
+          ...userData,
+          ...response.data,
+          token: tokenToUse,
+        };
+        dispatch(addUser(userDeatils));
+        dispatch(updateIsLogged(true));
+      }
+    } catch (error) {
+      logout();
+      navigate(apiEndPoint.LOGIN);
+      console.error('Error getting user data:', error);
+    }
+  };
+
+  const getReportOptions = async () => {
+    const tokenToUse = userData?.isLoginByGoogle ? googleLoginToken : userData?.token;
+    setToken(tokenToUse);
+    try {
+      const response = await getReportOptionsAPI();
+      if (response.success) {
+        setAllReportType(response.data || []);
+      }
+    } catch (error) {
+      console.error('Error getting report options:', error);
+    }
+  };
+
+  useEffect(() => {
+    getUserUserData();
+    getReportOptions();
+  }, []);
+
   return (
     <Layout>
       <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
         <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl">
-          <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">Upload X-ray Images</h1>
+          <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">
+            Upload Medical Images
+          </h1>
           <div className="flex flex-col md:flex-row items-center justify-around mb-6">
             <div className="flex flex-col w-full md:w-1/2 mb-4 md:mb-0 md:mr-4">
-              <input
-                type="file"
-                multiple
-                onChange={handleFileChange}
-                className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-              />
+              <div className="flex items-center mb-4">
+                <input
+                  type="file"
+                  multiple
+                  onChange={handleFileChange}
+                  className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                />
+                {allReportType?.length > 0 && (
+                  <select
+                    value={reportType}
+                    onChange={e => setReportType(e.target.value)}
+                    className="ml-4 block w-48 text-sm text-gray-500 py-2 px-4 border border-gray-300 rounded-md"
+                  >
+                    <option disabled value="">
+                      Select Report Type
+                    </option>
+                    {allReportType.map((type, index) => (
+                      <option key={_.get(type, 'name', '')} value={_.get(type, 'name', '')}>
+                        {_.get(type, 'displayName', '')}
+                      </option>
+                    ))}
+                  </select>
+                )}
+              </div>
               <textarea
                 placeholder="Enter clinic notes here..."
                 value={clinicNote}
@@ -102,13 +175,20 @@ const Home = () => {
                 <h2 className="text-lg font-semibold text-gray-700 mb-2">Preview:</h2>
                 <div className="grid grid-cols-2 gap-4">
                   {selectedFiles.map((file, index) => (
-                    <img
-                      key={index}
-                      src={URL.createObjectURL(file)}
-                      alt="X-ray preview"
-                      className="rounded-md shadow-md h-32 w-32 object-cover mb-4 cursor-pointer"
-                      onClick={() => openModal(URL.createObjectURL(file))}
-                    />
+                    <div key={index} className="relative">
+                      <img
+                        src={URL.createObjectURL(file)}
+                        alt="Medical preview"
+                        className="rounded-md shadow-md h-32 w-32 object-cover mb-4 cursor-pointer"
+                        onClick={() => openModal(URL.createObjectURL(file))}
+                      />
+                      <button
+                        onClick={() => handleRemoveImage(index)}
+                        className="absolute top-0 right-0 bg-slate-600 text-white rounded-full w-6 h-6 flex items-center justify-center"
+                      >
+                        &times;
+                      </button>
+                    </div>
                   ))}
                 </div>
               </div>
@@ -132,11 +212,7 @@ const Home = () => {
           )}
         </div>
       </div>
-      <ImageModal
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        imageSrc={modalImage}
-      />
+      <ImageModal isOpen={modalIsOpen} onRequestClose={closeModal} imageSrc={modalImage} />
     </Layout>
   );
 };
