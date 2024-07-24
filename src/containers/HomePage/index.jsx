@@ -41,7 +41,7 @@ const Home = () => {
       setSelectedFiles(validFiles);
       setReport('');
     } else {
-      alert('Please select valid image files.');
+      displayErrorToast('Please select valid image files.');
       event.target.value = null;
     }
   };
@@ -125,7 +125,7 @@ const Home = () => {
   }, []);
 
   return (
-    <Layout>
+    <Layout withRef={false}>
       <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
         <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl">
           <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">

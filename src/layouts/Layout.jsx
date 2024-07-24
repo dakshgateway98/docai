@@ -1,14 +1,18 @@
-import React from 'react';
+
+import Footer from '../components/Footer';
 import NavBar from '../components/Navbar';
 
+import { SectionRefsProvider } from '../contexts/sectionRefContext';
 
-const Layout = ({ ...props }) => {
-
+const Layout = ({ withRef, ...props }) => {
   return (
-    <div className="font-roboto font-thin">
-      <NavBar />
-      <div>{props.children}</div>
-    </div>
+    <SectionRefsProvider>
+      <div className="flex flex-col min-h-[100dvh]">
+        <NavBar withRef={withRef} />
+        <div>{props.children}</div>
+        <Footer />
+      </div>
+    </SectionRefsProvider>
   );
 };
 
