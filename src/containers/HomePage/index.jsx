@@ -126,37 +126,35 @@ const Home = () => {
 
   return (
     <Layout withRef={false}>
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 py-12 md:py-12 lg:py-24 xl:py-32">
         <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl">
           <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">
             Upload Medical Images
           </h1>
-          <div className="flex flex-col md:flex-row items-center justify-around mb-6">
-            <div className="flex flex-col w-full md:w-1/2 mb-4 md:mb-0 md:mr-4">
-              <div className="flex items-center mb-4">
-                <input
-                  type="file"
-                  multiple
-                  onChange={handleFileChange}
-                  className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-                />
-                {allReportType?.length > 0 && (
-                  <select
-                    value={reportType}
-                    onChange={e => setReportType(e.target.value)}
-                    className="ml-4 block w-48 text-sm text-gray-500 py-2 px-4 border border-gray-300 rounded-md"
-                  >
-                    <option disabled value="">
-                      Select Report Type
+          <div className="grid gap-6 lg:grid-cols-2">
+            <div className="flex flex-col space-y-4">
+              <input
+                type="file"
+                multiple
+                onChange={handleFileChange}
+                className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+              />
+              {allReportType?.length > 0 && (
+                <select
+                  value={reportType}
+                  onChange={e => setReportType(e.target.value)}
+                  className="block w-full text-sm text-gray-500 py-2 px-4 border border-gray-300 rounded-md"
+                >
+                  <option disabled value="">
+                    Select Report Type
+                  </option>
+                  {allReportType.map((type, index) => (
+                    <option key={_.get(type, 'name', '')} value={_.get(type, 'name', '')}>
+                      {_.get(type, 'displayName', '')}
                     </option>
-                    {allReportType.map((type, index) => (
-                      <option key={_.get(type, 'name', '')} value={_.get(type, 'name', '')}>
-                        {_.get(type, 'displayName', '')}
-                      </option>
-                    ))}
-                  </select>
-                )}
-              </div>
+                  ))}
+                </select>
+              )}
               <textarea
                 placeholder="Enter clinic notes here..."
                 value={clinicNote}
@@ -171,8 +169,8 @@ const Home = () => {
               </button>
             </div>
             {selectedFiles.length > 0 && (
-              <div className="flex flex-col w-full md:w-1/2 items-center">
-                <h2 className="text-lg font-semibold text-gray-700 mb-2">Preview:</h2>
+              <div className="flex flex-col items-center space-y-4">
+                <h2 className="text-lg font-semibold text-gray-700">Preview:</h2>
                 <div className="grid grid-cols-2 gap-4">
                   {selectedFiles.map((file, index) => (
                     <div key={index} className="relative">
