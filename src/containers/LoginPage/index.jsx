@@ -92,7 +92,7 @@ const Login = () => {
 
   return (
     <Layout withRef={false}>
-      <section className="w-full flex justify-center pt-16 pb-6 md:pt-16 md:pb-6 lg:pt-20 lg:pb-12 xl:pt-20 xl:pb-12 bg-muted">
+      <section className="w-full h-screen flex justify-center items-center bg-muted">
         <div className="container max-w-7xl px-4 md:px-6">
           <div className="flex justify-center items-center">
             <div className="w-full bg-white rounded-lg shadow dark:border sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
@@ -150,7 +150,7 @@ const Login = () => {
                       />
                       <div
                         onClick={togglePasswordVisibility}
-                        className="absolute top-4 right-0 pr-3 flex items-center cursor-pointer"
+                        className="absolute top-10 right-0 pr-3 flex items-center cursor-pointer"
                       >
                         {showPassword ? (
                           <FontAwesomeIcon icon={faEye} className="h-5 w-5 text-gray-700 dark:text-gray-300" />
