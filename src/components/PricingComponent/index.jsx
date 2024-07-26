@@ -5,7 +5,7 @@ const PricingComponent = () => {
     <section id="pricing" className="w-full flex justify-center py-6 md:py-12 lg:py-16 bg-muted">
       <div className="container max-w-7xl grid items-center gap-6 px-4 md:px-6">
         <div className="space-y-2">
-          <h2 className="text-3xl font-bold tracking-tighter md:text-4xl/tight">Pricing</h2>
+          <h2 className="text-3xl font-bold tracking-tighter md:text-4xl/tight">Pricing (Free For Now in Testing Mode)</h2>
           <p className="max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
             Choose the plan that best fits your needs and budget.
           </p>

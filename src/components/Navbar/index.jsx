@@ -3,21 +3,25 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import _ from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { IoHomeOutline } from 'react-icons/io5';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
 import { useSectionRefs } from '../../contexts/sectionRefContext';
 import { logout } from '../../helpers/logout';
 import { routes } from '../../utils';
+import { addUser, updateIsLogged } from '../../redux/userAuthSlice';
 
 const NavBar = ({ withRef }) => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const isLogged = useSelector(state => _.get(state, 'user.isLogged', false));
   const { featuresRef, pricingRef, reviewRef, aboutRef } = useSectionRefs();
 
   const handleLogout = () => {
+    dispatch(addUser({}));
+    dispatch(updateIsLogged(false));
     logout();
     navigate(routes.login);
   };
@@ -33,7 +37,7 @@ const NavBar = ({ withRef }) => {
           onClick={() => {
             navigate(routes.landingPage);
           }}
-          className="inline-flex h-7 items-center justify-center rounded-md border border-input bg-background px-8 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+          className="inline-flex h-7 items-center justify-center rounded-md border border-input bg-background px-4 md:px-8 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 cursor-pointer"
         >
           Home
         </div>
@@ -44,7 +48,7 @@ const NavBar = ({ withRef }) => {
       return (
         <div
           onClick={handleLogout}
-          className="inline-flex h-7 items-center justify-center rounded-md bg-red-400 px-4 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+          className="inline-flex h-7 items-center justify-center rounded-md bg-red-400 px-4 md:px-8 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 cursor-pointer"
         >
           Logout
         </div>
@@ -55,9 +59,9 @@ const NavBar = ({ withRef }) => {
           onClick={() => {
             navigate(routes.login);
           }}
-          className="inline-flex h-7 items-center justify-center rounded-md bg-primary px-8 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+          className="inline-flex h-7 items-center justify-center rounded-md bg-primary px-4 md:px-8 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 cursor-pointer"
         >
-          Login
+          Try for free
         </div>
       );
     }
@@ -72,30 +76,30 @@ const NavBar = ({ withRef }) => {
         <FontAwesomeIcon icon={faHospital} className="h-6 w-6" />
         <span className="sr-only">DocAi</span>
       </div>
-      <nav className="ml-auto flex items-center gap-4 sm:gap-6">
+      <nav className="ml-auto flex items-center gap-2 sm:gap-4 md:gap-6">
         {withRef && (
           <>
             <div
               onClick={() => scrollToSection(featuresRef)}
-              className="text-sm font-medium hover:underline underline-offset-4 cursor-pointer"
+              className="text-sm font-medium hover:underline underline-offset-4 cursor-pointer hidden sm:block"
             >
               Features
             </div>
             <div
               onClick={() => scrollToSection(pricingRef)}
-              className="text-sm font-medium hover:underline underline-offset-4 cursor-pointer"
+              className="text-sm font-medium hover:underline underline-offset-4 cursor-pointer hidden sm:block"
             >
               Pricing
             </div>
             <div
               onClick={() => scrollToSection(reviewRef)}
-              className="text-sm font-medium hover:underline underline-offset-4 cursor-pointer"
+              className="text-sm font-medium hover:underline underline-offset-4 cursor-pointer hidden sm:block"
             >
               Review
             </div>
             <div
               onClick={() => scrollToSection(aboutRef)}
-              className="text-sm font-medium hover:underline underline-offset-4 cursor-pointer"
+              className="text-sm font-medium hover:underline underline-offset-4 cursor-pointer hidden sm:block"
             >
               About
             </div>
@@ -103,23 +107,6 @@ const NavBar = ({ withRef }) => {
         )}
 
         {handleDisplayLastButton()}
-        {/* {isLogged ? (
-          <div
-            onClick={handleLogout}
-            className="inline-flex h-7 items-center justify-center rounded-md bg-red-400 px-4 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
-          >
-            <span>Logout</span>
-          </div>
-        ) : (
-          <div
-            onClick={() => {
-              navigate(routes.login);
-            }}
-            className="inline-flex h-10 items-center justify-center rounded-md bg-primary px-8 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
-          >
-            <span>Sign Up</span>
-          </div>
-        )} */}
       </nav>
     </header>
   );

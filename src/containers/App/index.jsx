@@ -10,13 +10,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import { HomePage, LoginPage } from '../';
 import { CONSTANT } from '../../helpers/constant';
 import { en, it } from '../../locales';
-import { history, routes } from '../../utils';
+import { routes } from '../../utils';
 import LandingPage from '../LandingPage';
 import VerifyPage from '../VerifyPage';
 import ProtectedRoute from './ProtectedRoute';
 
-// Import the ProtectedRoute component
-// import { useHistory } from 'react-router-dom';
 
 i18n.use(initReactI18next).init({
   lng: 'en',

@@ -1,7 +1,11 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import bannerSvg from '../../Assests/images/banner_image2.jpeg';
+import { routes } from '../../utils';
 const BannerComponent = () => {
+
+  const navigate = useNavigate();
+
   return (
     <section className="w-full flex justify-center pt-16 pb-6 md:pt-16 md:pb-6 lg:pt-20 lg:pb-12 xl:pt-20 xl:pb-12">
           <div className="container max-w-7xl px-4 md:px-6">
@@ -18,18 +22,18 @@ const BannerComponent = () => {
                 </div>
                 <div className="flex flex-col gap-2 min-[400px]:flex-row">
                   <button
-                    // to={"/"}
-                    // href="#"
+                    onClick={() => {
+                      navigate(routes.login);
+                    }}
                     className="inline-flex h-10 items-center justify-center rounded-md bg-primary px-8 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
-                    // prefetch={false}
+                    
                   >
-                    Start Now
+                    Try For Free
                   </button>
                   <button
-                    // to={'/'}
-                    // href="#"
+                    
                     className="inline-flex h-10 items-center justify-center rounded-md border border-input bg-background px-8 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
-                    // prefetch={false}
+                   
                   >
                     Learn More
                   </button>

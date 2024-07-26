@@ -2,7 +2,7 @@ import React from 'react';
 
 const AboutComponent = () => {
   return (
-    <section id="about" className="w-full flex justify-center pt-6 pb-12 md:pt-12 md:pb-24 lg:pt-16 lg:pb-32">
+    <section id="about" className="w-full flex justify-center pt-6 pb-24 md:pt-12 md:pb-24 lg:pt-16 lg:pb-32">
       <div className="container max-w-7xl px-4 md:px-6">
         <div className="flex flex-col items-center justify-center space-y-4 text-center">
           <div className="space-y-2">
