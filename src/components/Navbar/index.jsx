@@ -70,7 +70,7 @@ const NavBar = ({ withRef }) => {
   return (
     <header className="fixed top-0 left-0 right-0 px-4 lg:px-6 h-14 flex items-center bg-muted shadow dark:border">
       <div
-        onClick={() => navigate(routes.landingPage)}
+        onClick={() =>  navigate(isLogged ? routes.home : routes.landingPage)}
         className="flex items-center justify-center cursor-pointer"
       >
         <FontAwesomeIcon icon={faHospital} className="h-6 w-6" />
