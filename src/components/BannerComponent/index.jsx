@@ -2,9 +2,15 @@ import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import bannerSvg from '../../Assests/images/banner_image2.jpeg';
 import { routes } from '../../utils';
+import { useSectionRefs } from '../../contexts/sectionRefContext';
 const BannerComponent = () => {
 
   const navigate = useNavigate();
+  const { featuresRef } = useSectionRefs();
+
+  const scrollToSection = ref => {
+    ref?.current?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   return (
     <section className="w-full flex justify-center pt-16 pb-6 md:pt-16 md:pb-6 lg:pt-20 lg:pb-12 xl:pt-20 xl:pb-12">
@@ -31,7 +37,7 @@ const BannerComponent = () => {
                     Try For Free
                   </button>
                   <button
-                    
+                    onClick={() => {scrollToSection(featuresRef)}}
                     className="inline-flex h-10 items-center justify-center rounded-md border border-input bg-background px-8 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
                    
                   >

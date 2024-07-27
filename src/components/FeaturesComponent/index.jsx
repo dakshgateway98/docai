@@ -30,17 +30,16 @@ const FeaturesComponent = () => {
                 <div className="grid gap-1">
                   <h3 className="text-xl font-bold">Automated Reporting</h3>
                   <p className="text-muted-foreground">
-                    DocAi\'s AI algorithms generate comprehensive reports from medical images and
+                    DocAi's AI algorithms generate comprehensive reports from medical images and
                     data, saving you time and effort.
                   </p>
                 </div>
               </li>
               <li>
                 <div className="grid gap-1">
-                  <h3 className="text-xl font-bold">Customizable Templates</h3>
+                  <h3 className="text-xl font-bold">AI-Generated Reports</h3>
                   <p className="text-muted-foreground">
-                    Tailor your reports to your specific needs with customizable templates and
-                    formatting options.
+                  DocAi's AI will generate a report in a proper format to meet your diagnostic needs.
                   </p>
                 </div>
               </li>

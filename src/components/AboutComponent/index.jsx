@@ -10,7 +10,7 @@ const AboutComponent = () => {
             <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">About DocAi</h2>
             <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
               DocAi is an innovative AI-powered medical reporting application that was founded in
-              2020 by a team of healthcare professionals and technology experts. Our mission is to
+              2024 by a team of healthcare professionals and technology experts. Our mission is to
               revolution
             </p>
           </div>

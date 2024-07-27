@@ -19,10 +19,10 @@ const ReviewComponent = () => {
               <div className="flex items-start gap-4 rounded-lg bg-background p-4 shadow-sm">
               <FontAwesomeIcon icon={faUser}  className='h-5 w-5 '/>
                 <div className="space-y-2">
-                  <div className="font-bold">Dr. Emily Smith</div>
+                  <div className="font-bold">Dr. Mahesh Patel</div>
                   <p className="text-muted-foreground">
-                    "DocAi has revolutionized my medical reporting process.\n The automated analysis and customizable
-                    templates have\n saved me so much time and effort."
+                    "DocAi has revolutionized my medical reporting process.It will generate the report in the 
+                    proper format."
                   </p>
                 </div>
               </div>
@@ -31,8 +31,8 @@ const ReviewComponent = () => {
                 <div className="space-y-2">
                   <div className="font-bold">Dr. Michael Johnson</div>
                   <p className="text-muted-foreground">
-                    "As a medical student, DocAi has been an invaluable tool\n for generating comprehensive reports. The
-                    accuracy and\n attention to detail are truly impressive."
+                    "As a medical student, DocAi has been an invaluable tool for generating comprehensive reports. The
+                    accuracy and attention to detail are truly impressive."
                   </p>
                 </div>
               </div>

@@ -1,5 +1,6 @@
 import i18n from 'i18next';
 import _ from 'lodash';
+import { useEffect } from 'react';
 import { initReactI18next } from 'react-i18next';
 import Modal from 'react-modal';
 import { useSelector } from 'react-redux';
@@ -15,7 +16,6 @@ import LandingPage from '../LandingPage';
 import VerifyPage from '../VerifyPage';
 import ProtectedRoute from './ProtectedRoute';
 
-
 i18n.use(initReactI18next).init({
   lng: 'en',
   fallbackLng: 'en',
@@ -28,6 +28,12 @@ i18n.use(initReactI18next).init({
 const App = () => {
   const isLogged = useSelector(state => _.get(state, 'user.isLogged', false));
   Modal.setAppElement('#root');
+
+  useEffect(() => {
+    if (window.location.pathname === '/') {
+      window.location.replace(CONSTANT.BASE_PATH);
+    }
+  }, []);
 
   return (
     <Router basename={CONSTANT.BASE_PATH}>
