@@ -12,6 +12,7 @@ import { addUser, updateIsLogged } from '../../redux/userAuthSlice';
 import { routes } from '../../utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons';
+import { validateEmail, validatePassword, validateUserName } from '../../helpers/validations';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -25,6 +26,9 @@ const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [isForgotpass, setIsForgotpass] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [userNameError, setUserNameError] = useState('');
 
   const togglePasswordVisibility = () => {
     setShowPassword(prevShowPassword => !prevShowPassword);
@@ -32,6 +36,33 @@ const Login = () => {
 
   const onSubmit = async e => {
     e.preventDefault();
+    let valid = true;
+
+    if (!validateEmail(email)) {
+      setEmailError('Invalid email address');
+      valid = false;
+    } else {
+      setEmailError('');
+    }
+
+    if (!isForgotpass && !isLogin && !validatePassword(password)) {
+      setPasswordError('Password must be at least 6 characters');
+      valid = false;
+    } else {
+      setPasswordError('');
+    }
+
+    if (!isLogin && !validateUserName(userName)) {
+      setUserNameError('Username cannot be empty');
+      valid = false;
+    } else {
+      setUserNameError('');
+    }
+
+    if (!valid) {
+      return;
+    }
+
     try {
       setLoading(true);
       if (isForgotpass) {
@@ -97,10 +128,10 @@ const Login = () => {
           <div className="flex justify-center items-center">
             <div className="w-full bg-white rounded-lg shadow dark:border sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
               <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-                <h1 className="text-xl font-bold tracking-tighter  text-gray-900 dark:text-white">
+                <h1 className="text-xl font-bold tracking-tighter text-gray-900 dark:text-white">
                   {isLogin ? 'Sign in to your account' : isForgotpass ? 'Send an Email' : 'Create an account'}
                 </h1>
-                <form className="space-y-4 md:space-y-6" action="#">
+                <form className="space-y-4 md:space-y-6" onSubmit={onSubmit}>
                   {!isForgotpass && !isLogin && (
                     <div>
                       <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
@@ -116,6 +147,7 @@ const Login = () => {
                         placeholder="John Doe"
                         required={true}
                       />
+                      {userNameError && <span className="text-red-600 font-bold">{userNameError}</span>}
                     </div>
                   )}
                   <div>
@@ -132,6 +164,7 @@ const Login = () => {
                       placeholder="name@company.com"
                       required={true}
                     />
+                    {emailError && <span className="text-red-600 font-bold">{emailError}</span>}
                   </div>
                   {!isForgotpass && isLogin && (
                     <div className="relative">
@@ -158,6 +191,7 @@ const Login = () => {
                           <FontAwesomeIcon icon={faEyeSlash} className="h-5 w-5 text-gray-700 dark:text-gray-300" />
                         )}
                       </div>
+                      {passwordError && <span className="text-red-600 font-bold">{passwordError}</span>}
                     </div>
                   )}
                   {errorMessage && <span className="text-red-600 font-bold">{errorMessage}</span>}
@@ -175,8 +209,7 @@ const Login = () => {
                     )}
                   </div>
                   <button
-                    onClick={onSubmit}
-                    type="button"
+                    type="submit"
                     className="flex w-full justify-center rounded-md bg-primary px-3 py-1.5 text-sm font-semibold leading-6 text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
                   >
                     {isLoading ? (

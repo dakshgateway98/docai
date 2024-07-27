@@ -50,7 +50,7 @@ const App = () => {
           path={routes.home}
           element={<ProtectedRoute isLoggedIn={isLogged} children={<HomePage />} />}
         />
-        <Route path="*" element={<Navigate to={routes.login} replace />} />
+        <Route path="*" element={<Navigate to={"/"} replace />} />
       </Routes>
     </Router>
   );
