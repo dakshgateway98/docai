@@ -27,7 +27,6 @@ const Login = () => {
   const [isForgotpass, setIsForgotpass] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [emailError, setEmailError] = useState('');
-  const [passwordError, setPasswordError] = useState('');
   const [userNameError, setUserNameError] = useState('');
 
   const togglePasswordVisibility = () => {
@@ -45,14 +44,7 @@ const Login = () => {
       setEmailError('');
     }
 
-    if (!isForgotpass && !isLogin && !validatePassword(password)) {
-      setPasswordError('Password must be at least 6 characters');
-      valid = false;
-    } else {
-      setPasswordError('');
-    }
-
-    if (!isLogin && !validateUserName(userName)) {
+    if (!isLogin && !isForgotpass && !validateUserName(userName)) {
       setUserNameError('Username cannot be empty');
       valid = false;
     } else {
@@ -62,6 +54,7 @@ const Login = () => {
     if (!valid) {
       return;
     }
+
 
     try {
       setLoading(true);
@@ -102,6 +95,10 @@ const Login = () => {
     } catch (error) {
       console.error({ error });
     } finally {
+      setUserName('');
+      setEmail('');
+      setPassword('');
+      setErrorMessage('');
       setLoading(false);
     }
   };
@@ -191,7 +188,6 @@ const Login = () => {
                           <FontAwesomeIcon icon={faEyeSlash} className="h-5 w-5 text-gray-700 dark:text-gray-300" />
                         )}
                       </div>
-                      {passwordError && <span className="text-red-600 font-bold">{passwordError}</span>}
                     </div>
                   )}
                   {errorMessage && <span className="text-red-600 font-bold">{errorMessage}</span>}
