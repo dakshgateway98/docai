@@ -20,10 +20,7 @@ const NavBar = ({ withRef }) => {
   const { featuresRef, pricingRef, reviewRef, aboutRef } = useSectionRefs();
 
   const handleLogout = () => {
-    dispatch(addUser({}));
-    dispatch(updateIsLogged(false));
-    logout();
-    navigate(routes.login);
+    logout(dispatch , navigate);
   };
   const scrollToSection = ref => {
     ref?.current?.scrollIntoView({ behavior: 'smooth' });

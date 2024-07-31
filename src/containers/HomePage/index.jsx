@@ -100,8 +100,7 @@ const Home = () => {
         dispatch(updateIsLogged(true));
       }
     } catch (error) {
-      logout();
-      navigate(apiEndPoint.LOGIN);
+      logout(dispatch, navigate);
       console.error('Error getting user data:', error);
     }
   };
@@ -115,6 +114,7 @@ const Home = () => {
         setAllReportType(response.data || []);
       }
     } catch (error) {
+      logout(dispatch, navigate);
       console.error('Error getting report options:', error);
     }
   };
