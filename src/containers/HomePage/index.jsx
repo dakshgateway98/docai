@@ -1,4 +1,4 @@
-import { faCopy } from '@fortawesome/free-solid-svg-icons';
+import { faCopy, faRefresh } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
@@ -112,6 +112,9 @@ const Home = () => {
       const response = await getReportOptionsAPI();
       if (response.success) {
         setAllReportType(response.data || []);
+        if (response.data?.length > 0) {
+          setReportType(response.data[0].name);
+        }
       }
     } catch (error) {
       logout(dispatch, navigate);
@@ -124,13 +127,30 @@ const Home = () => {
     getReportOptions();
   }, []);
 
+  const handleClear = () => {
+    setSelectedFiles([]);
+    setReport('');
+    setClinicNote('');
+    setModalIsOpen(false);
+    setModalImage(null);
+    setReportType(allReportType.length > 0 ? allReportType[0].name : '');
+  };
+
   return (
     <Layout withRef={false}>
       <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 py-12 md:py-12 lg:py-24 xl:py-32">
         <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl">
-          <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">
-            Upload Medical Images
-          </h1>
+          <div className="flex justify-between items-start">
+            <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">
+              Upload Medical Images
+            </h1>
+            <FontAwesomeIcon
+              icon={faRefresh}
+              onClick={handleClear}
+              className="h-4 bg-red-500 text-white px-2 py-1 rounded-md font-semibold hover:bg-red-400 transition duration-200"
+              title="Clear All"
+            />
+          </div>
           <div className="grid gap-6 lg:grid-cols-2">
             <div className="flex flex-col space-y-4">
               <input
@@ -145,9 +165,6 @@ const Home = () => {
                   onChange={e => setReportType(e.target.value)}
                   className="block w-full text-sm text-gray-500 py-2 px-4 border border-gray-300 rounded-md"
                 >
-                  <option disabled value="">
-                    Select Report Type
-                  </option>
                   {allReportType.map((type, index) => (
                     <option key={_.get(type, 'name', '')} value={_.get(type, 'name', '')}>
                       {_.get(type, 'displayName', '')}
