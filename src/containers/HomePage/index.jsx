@@ -13,7 +13,7 @@ import { apiEndPoint } from '../../api/apiEndPoint';
 import { getReportOptionsAPI, uploadXrayAPI } from '../../api/genai';
 import { getUserDetailsAPI } from '../../api/user';
 import ChatGPTOutput from '../../common/ChatGPTOutput';
-import { displayErrorToast } from '../../helpers/displayToast';
+import { displayErrorToast, displayInfoToast } from '../../helpers/displayToast';
 import { logout } from '../../helpers/logout';
 import useCookie from '../../hooks/useCookie';
 import { addUser, updateIsLogged } from '../../redux/userAuthSlice';
@@ -72,7 +72,9 @@ const Home = () => {
   };
 
   const handleCopyReport = () => {
-    navigator.clipboard.writeText(report);
+    navigator.clipboard.writeText(report).finally(() => {
+      displayInfoToast('Report copied to clipboard.');
+    });
   };
 
   const openModal = image => {
@@ -139,7 +141,7 @@ const Home = () => {
   return (
     <Layout withRef={false}>
       <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 py-12 md:py-12 lg:py-24 xl:py-32">
-        <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl">
+        <div className="bg-white xl:p-8 lg:p-8 md:p-6 sm:p-4 p-4 rounded-lg shadow-lg w-full max-w-4xl">
           <div className="flex justify-between items-start">
             <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">
               Upload Medical Images
