@@ -1,7 +1,7 @@
 {
   "name": "daksh.docai.react",
   "version": "0.1.0",
-  "description": "React boilerplate using vite, redux-toolkit, tailwind and i18next",
+  "description": "DocAI React frontend — medical document assistant UI",
   "keywords": [
     "react",
     "react-boilerplate",
